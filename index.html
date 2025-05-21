@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>מחשבון שווי שימוש רכב חברה</title>
+    <title>מחשבוני שכר ומס</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -95,139 +95,233 @@
         th {
             background-color: #f2f2f2;
         }
+        /* סגנון עבור הכרטיסיות */
+        .tabs {
+            overflow: hidden;
+            border: 1px solid #ccc;
+            background-color: #f1f1f1;
+            border-radius: 5px 5px 0 0;
+        }
+        .tab-button {
+            background-color: inherit;
+            float: right;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            transition: 0.3s;
+            font-size: 16px;
+            font-weight: bold;
+            width: auto;
+            margin-top: 0;
+        }
+        .tab-button:hover {
+            background-color: #ddd;
+        }
+        .tab-button.active {
+            background-color: #3498db;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+        .optional-field {
+            color: #7f8c8d;
+            font-size: 0.85em;
+            margin-right: 5px;
+            font-weight: normal;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>מחשבון שווי שימוש רכב חברה</h1>
+        <h1>מחשבוני שכר ומס</h1>
         
-        <div class="form-group">
-            <label for="salary">שכר ברוטו חודשי (₪):</label>
-            <input type="number" id="salary" min="0" step="100" placeholder="הכנס משכורת ברוטו">
+        <!-- כרטיסיות -->
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'car-calculator')">מחשבון שווי שימוש רכב חברה</button>
+            <!-- כרטיסיות נוספות יתווספו כאן בעתיד -->
         </div>
         
-        <div class="form-group">
-            <label for="car-type">דגם רכב חברה:</label>
-            <select id="car-type">
-                <option value="">-- בחר דגם רכב --</option>
-                <option value="1">קבוצה 1 - שווי שימוש 2,910 ₪</option>
-                <option value="2">קבוצה 2 - שווי שימוש 3,150 ₪</option>
-                <option value="3">קבוצה 3 - שווי שימוש 4,060 ₪</option>
-                <option value="4">קבוצה 4 - שווי שימוש 4,880 ₪</option>
-                <option value="5">קבוצה 5 - שווי שימוש 6,750 ₪</option>
-                <option value="6">קבוצה 6 - שווי שימוש 8,770 ₪</option>
-                <option value="7">קבוצה 7 - שווי שימוש 11,250 ₪</option>
-                <option value="hybrid">רכב היברידי - שווי שימוש 1,000 ₪</option>
-                <option value="plugin">היברידי פלאג-אין - שווי שימוש 1,000 ₪</option>
-                <option value="electric">רכב חשמלי - שווי שימוש 900 ₪</option>
-                <option value="custom">אחר (הכנס שווי שימוש ידנית)</option>
-            </select>
-        </div>
-        
-        <div class="form-group" id="custom-value-container" style="display: none;">
-            <label for="custom-value">שווי שימוש חודשי (₪):</label>
-            <input type="number" id="custom-value" min="0" step="10" placeholder="הכנס שווי שימוש ידנית">
-        </div>
-        
-        <button onclick="calculateTax()">חשב</button>
-        
-        <div class="result" id="result" style="display: none;">
-            <h2>תוצאות החישוב</h2>
-            <div class="result-row">
-                <span class="result-label">שכר ברוטו:</span>
-                <span id="result-salary"></span>
+        <!-- תוכן הכרטיסייה "מחשבון שווי שימוש רכב חברה" -->
+        <div id="car-calculator" class="tab-content" style="display: block;">
+            <div class="form-group">
+                <label for="salary">שכר ברוטו חודשי (₪):</label>
+                <input type="number" id="salary" min="0" step="100" placeholder="הכנס משכורת ברוטו">
             </div>
-            <div class="result-row">
-                <span class="result-label">שווי שימוש רכב:</span>
-                <span id="result-car-value"></span>
+            
+            <div class="form-group">
+                <label for="credit-points">נקודות זיכוי: <span class="optional-field">(לא חובה)</span></label>
+                <input type="number" id="credit-points" min="0" step="0.25" value="2.25" placeholder="הכנס מספר נקודות זיכוי">
             </div>
-            <div class="result-row">
-                <span class="result-label">שכר ברוטו כולל שווי שימוש:</span>
-                <span id="result-total-bruto"></span>
+            
+            <div class="form-group">
+                <label for="car-group">קבוצת מחיר רכב:</label>
+                <select id="car-group">
+                    <option value="">-- בחר קבוצת מחיר --</option>
+                    <option value="1">קבוצה 1 (עד 130,000 ₪)</option>
+                    <option value="2">קבוצה 2 (130,001-141,000 ₪)</option>
+                    <option value="3">קבוצה 3 (141,001-150,000 ₪)</option>
+                    <option value="4">קבוצה 4 (150,001-188,000 ₪)</option>
+                    <option value="5">קבוצה 5 (188,001-265,000 ₪)</option>
+                    <option value="6">קבוצה 6 (265,001-380,000 ₪)</option>
+                    <option value="7">קבוצה 7 (מעל 380,000 ₪)</option>
+                    <option value="custom">אחר (הכנס שווי שימוש ידנית)</option>
+                </select>
             </div>
-            <div class="result-row">
-                <span class="result-label">ניכוי מס בגין שווי שימוש (הערכה):</span>
-                <span id="result-tax-deduction"></span>
+
+            <div class="form-group">
+                <label for="car-type">סוג הנעה:</label>
+                <select id="car-type">
+                    <option value="regular">רגיל (בנזין/דיזל)</option>
+                    <option value="hybrid">היברידי</option>
+                    <option value="plugin">היברידי פלאג-אין</option>
+                    <option value="electric">חשמלי</option>
+                </select>
             </div>
-            <div class="result-row">
-                <span class="result-label">השפעה חודשית על השכר נטו:</span>
-                <span id="result-net-effect"></span>
+            
+            <div class="form-group" id="custom-value-container" style="display: none;">
+                <label for="custom-value">שווי שימוש חודשי (₪):</label>
+                <input type="number" id="custom-value" min="0" step="10" placeholder="הכנס שווי שימוש ידנית">
             </div>
-            <div class="result-row">
-                <span class="result-label">השפעה שנתית על השכר נטו:</span>
-                <span id="result-annual-effect"></span>
+            
+            <button onclick="calculateTax()">חשב</button>
+            
+            <div class="result" id="result" style="display: none;">
+                <h2>תוצאות החישוב</h2>
+                <div class="result-row">
+                    <span class="result-label">שכר ברוטו:</span>
+                    <span id="result-salary"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">קבוצת מחיר / סוג רכב:</span>
+                    <span id="result-car-details"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">שווי שימוש רכב:</span>
+                    <span id="result-car-value"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">שכר ברוטו כולל שווי שימוש:</span>
+                    <span id="result-total-bruto"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">ניכוי מס בגין שווי שימוש (הערכה):</span>
+                    <span id="result-tax-deduction"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">השפעה חודשית על השכר נטו:</span>
+                    <span id="result-net-effect"></span>
+                </div>
+                <div class="result-row">
+                    <span class="result-label">השפעה שנתית על השכר נטו:</span>
+                    <span id="result-annual-effect"></span>
+                </div>
             </div>
-        </div>
-        
-        <div style="margin-top: 30px;">
-            <h3>מידע על קבוצות מחיר רכב</h3>
-            <table>
-                <tr>
-                    <th>קבוצה</th>
-                    <th>שווי שימוש חודשי (₪)</th>
-                    <th>מחיר רכב משוער</th>
-                </tr>
-                <tr>
-                    <td>קבוצה 1</td>
-                    <td>2,910 ₪</td>
-                    <td>עד 130,000 ₪</td>
-                </tr>
-                <tr>
-                    <td>קבוצה 2</td>
-                    <td>3,150 ₪</td>
-                    <td>130,001-141,000 ₪</td>
-                </tr>
-                <tr>
-                    <td>קבוצה 3</td>
-                    <td>4,060 ₪</td>
-                    <td>141,001-150,000 ₪</td>
-                </tr>
-                <tr>
-                    <td>קבוצה 4</td>
-                    <td>4,880 ₪</td>
-                    <td>150,001-188,000 ₪</td>
-                </tr>
-                <tr>
-                    <td>קבוצה 5</td>
-                    <td>6,750 ₪</td>
-                    <td>188,001-265,000 ₪</td>
-                </tr>
-                <tr>
-                    <td>קבוצה 6</td>
-                    <td>8,770 ₪</td>
-                    <td>265,001-380,000 ₪</td>
-                </tr>
-                <tr>
-                    <td>קבוצה 7</td>
-                    <td>11,250 ₪</td>
-                    <td>מעל 380,000 ₪</td>
-                </tr>
-                <tr>
-                    <td>רכב היברידי</td>
-                    <td>1,000 ₪</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>היברידי פלאג-אין</td>
-                    <td>1,000 ₪</td>
-                    <td>-</td>
-                </tr>
-                <tr>
-                    <td>רכב חשמלי</td>
-                    <td>900 ₪</td>
-                    <td>-</td>
-                </tr>
-            </table>
-        </div>
-        
-        <div style="margin-top: 30px; font-size: 12px; color: #666;">
-            <p><strong>הערה:</strong> החישובים מבוססים על נתוני שווי שימוש וטבלאות מס הכנסה לשנת 2025. התוצאות מהוות הערכה בלבד ואינן מחליפות ייעוץ מקצועי. שיעורי המס מחושבים באופן מקורב.</p>
+            
+            <div style="margin-top: 30px;">
+                <h3>מידע על סוגי רכב ושווי שימוש</h3>
+                <table>
+                    <tr>
+                        <th>סוג רכב</th>
+                        <th>קבוצת מחיר</th>
+                        <th>שווי שימוש חודשי (₪)</th>
+                        <th>מחיר רכב משוער</th>
+                    </tr>
+                    <tr>
+                        <td>רגיל (בנזין/דיזל)</td>
+                        <td>קבוצה 1</td>
+                        <td>2,910 ₪</td>
+                        <td>עד 130,000 ₪</td>
+                    </tr>
+                    <tr>
+                        <td>רגיל (בנזין/דיזל)</td>
+                        <td>קבוצה 2</td>
+                        <td>3,150 ₪</td>
+                        <td>130,001-141,000 ₪</td>
+                    </tr>
+                    <tr>
+                        <td>רגיל (בנזין/דיזל)</td>
+                        <td>קבוצה 3</td>
+                        <td>4,060 ₪</td>
+                        <td>141,001-150,000 ₪</td>
+                    </tr>
+                    <tr>
+                        <td>רגיל (בנזין/דיזל)</td>
+                        <td>קבוצה 4</td>
+                        <td>4,880 ₪</td>
+                        <td>150,001-188,000 ₪</td>
+                    </tr>
+                    <tr>
+                        <td>רגיל (בנזין/דיזל)</td>
+                        <td>קבוצה 5</td>
+                        <td>6,750 ₪</td>
+                        <td>188,001-265,000 ₪</td>
+                    </tr>
+                    <tr>
+                        <td>רגיל (בנזין/דיזל)</td>
+                        <td>קבוצה 6</td>
+                        <td>8,770 ₪</td>
+                        <td>265,001-380,000 ₪</td>
+                    </tr>
+                    <tr>
+                        <td>רגיל (בנזין/דיזל)</td>
+                        <td>קבוצה 7</td>
+                        <td>11,250 ₪</td>
+                        <td>מעל 380,000 ₪</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4"><strong>הנחות לרכבים ידידותיים לסביבה:</strong></td>
+                    </tr>
+                    <tr>
+                        <td>היברידי</td>
+                        <td>כל הקבוצות</td>
+                        <td>הנחה של 500 ₪ משווי השימוש הרגיל</td>
+                        <td>-</td>
+                    </tr>
+                    <tr>
+                        <td>היברידי פלאג-אין / חשמלי</td>
+                        <td>כל הקבוצות</td>
+                        <td>הנחה של 1,000 ₪ משווי השימוש הרגיל</td>
+                        <td>-</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <div style="margin-top: 30px; font-size: 12px; color: #666;">
+                <p><strong>הערה:</strong> החישובים מבוססים על נתוני שווי שימוש וטבלאות מס הכנסה לשנת 2025. התוצאות מהוות הערכה בלבד ואינן מחליפות ייעוץ מקצועי. שיעורי המס מחושבים באופן מקורב.</p>
+            </div>
         </div>
     </div>
 
     <script>
+        // פונקציה לפתיחת כרטיסיות
+        function openTab(evt, tabName) {
+            let i, tabContent, tabButtons;
+            
+            // הסתרת כל תוכן הכרטיסיות
+            tabContent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabContent.length; i++) {
+                tabContent[i].style.display = "none";
+            }
+            
+            // הסרת המחלקה "active" מכל הכפתורים
+            tabButtons = document.getElementsByClassName("tab-button");
+            for (i = 0; i < tabButtons.length; i++) {
+                tabButtons[i].className = tabButtons[i].className.replace(" active", "");
+            }
+            
+            // הצגת הכרטיסייה הנוכחית וסימון הכפתור כפעיל
+            document.getElementById(tabName).style.display = "block";
+            evt.currentTarget.className += " active";
+        }
+
         // הצגת שדה הזנה מותאם אישית כאשר בוחרים "אחר"
-        document.getElementById('car-type').addEventListener('change', function() {
+        document.getElementById('car-group').addEventListener('change', function() {
             if (this.value === 'custom') {
                 document.getElementById('custom-value-container').style.display = 'block';
             } else {
@@ -235,22 +329,58 @@
             }
         });
 
-        function getCarValue(carType) {
+        function getCarValue(carGroup, carType) {
+            let baseValue = 0;
+            
+            // קביעת שווי שימוש בסיסי לפי קבוצת מחיר
+            if (carGroup === 'custom') {
+                const customValue = parseFloat(document.getElementById('custom-value').value);
+                return isNaN(customValue) ? 0 : customValue;
+            } else if (carGroup) {
+                switch(carGroup) {
+                    case '1': baseValue = 2910; break;
+                    case '2': baseValue = 3150; break;
+                    case '3': baseValue = 4060; break;
+                    case '4': baseValue = 4880; break;
+                    case '5': baseValue = 6750; break;
+                    case '6': baseValue = 8770; break;
+                    case '7': baseValue = 11250; break;
+                    default: baseValue = 0;
+                }
+            }
+            
+            // התאמת שווי השימוש לפי סוג ההנעה
             switch(carType) {
-                case '1': return 2910;
-                case '2': return 3150;
-                case '3': return 4060;
-                case '4': return 4880;
-                case '5': return 6750;
-                case '6': return 8770;
-                case '7': return 11250;
-                case 'hybrid': return 1000;
-                case 'plugin': return 1000;
-                case 'electric': return 900;
-                case 'custom': 
-                    const customValue = parseFloat(document.getElementById('custom-value').value);
-                    return isNaN(customValue) ? 0 : customValue;
-                default: return 0;
+                case 'hybrid': 
+                    return Math.max(0, baseValue - 500); // הנחה של 500 ₪ לרכב היברידי
+                case 'plugin':
+                case 'electric': 
+                    return Math.max(0, baseValue - 1000); // הנחה של 1000 ₪ לרכב חשמלי ופלאג-אין
+                default: 
+                    return baseValue; // רכב רגיל
+            }
+        }
+
+        function getCarDescription(carGroup, carType) {
+            let description = "";
+            
+            // תיאור קבוצת המחיר
+            if (carGroup === 'custom') {
+                description = "רכב בשווי שימוש מותאם אישית";
+            } else if (carGroup) {
+                description = "קבוצה " + carGroup;
+            }
+            
+            // הוספת תיאור סוג ההנעה
+            switch(carType) {
+                case 'hybrid': 
+                    return "רכב היברידי" + (description ? " (" + description + ")" : "");
+                case 'plugin':
+                    return "רכב היברידי פלאג-אין" + (description ? " (" + description + ")" : "");
+                case 'electric':
+                    return "רכב חשמלי" + (description ? " (" + description + ")" : "");
+                default:
+                    return description ? description + " (רכב רגיל)" : "רכב רגיל";
             }
         }
 
@@ -272,22 +402,30 @@
         function calculateTax() {
             // קבלת קלט מהמשתמש
             const salary = parseFloat(document.getElementById('salary').value);
+            const carGroup = document.getElementById('car-group').value;
             const carType = document.getElementById('car-type').value;
+            const creditPoints = parseFloat(document.getElementById('credit-points').value) || 2.25; // ברירת מחדל 2.25 נקודות זיכוי
             
             // בדיקת תקינות הקלט
-            if (isNaN(salary) || salary < 0 || carType === '') {
-                alert('נא להזין שכר ברוטו ולבחור דגם רכב');
+            if (isNaN(salary) || salary < 0 || (carGroup === '' && carGroup === 'custom' && document.getElementById('custom-value').value === '')) {
+                alert('נא להזין שכר ברוטו ולבחור סוג רכב');
                 return;
             }
             
             // חישוב שווי השימוש ברכב
-            const carValue = getCarValue(carType);
+            const carValue = getCarValue(carGroup, carType);
+            const carDescription = getCarDescription(carGroup, carType);
             
             // חישוב שכר ברוטו כולל שווי שימוש
             const totalBrutoSalary = salary + carValue;
             
+            // ערך נקודת זיכוי (2025)
+            const creditPointValue = 235;
+            
+            // חישוב סה"כ זיכוי ממס
+            const totalCreditPoints = creditPoints * creditPointValue;
+            
             // הערכת מס הכנסה על שווי השימוש
-            // מחשבים את שיעור המס השולי על בסיס שכר הברוטו הכולל
             const taxRate = calculateTaxRate(totalBrutoSalary);
             const taxDeduction = carValue * taxRate;
             
@@ -297,6 +435,7 @@
             
             // הצגת התוצאות
             document.getElementById('result-salary').textContent = formatCurrency(salary);
+            document.getElementById('result-car-details').textContent = carDescription;
             document.getElementById('result-car-value').textContent = formatCurrency(carValue);
             document.getElementById('result-total-bruto').textContent = formatCurrency(totalBrutoSalary);
             document.getElementById('result-tax-deduction').textContent = formatCurrency(taxDeduction);
