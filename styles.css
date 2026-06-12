@@ -1,0 +1,490 @@
+/**
+ * Car Tax Calculator - Responsive Stylesheet
+ * Mobile-first responsive design with accessibility support
+ */
+
+:root {
+  --primary-color: #3498db;
+  --primary-dark: #2980b9;
+  --primary-light: #5dade2;
+  --success-color: #27ae60;
+  --error-color: #e74c3c;
+  --gray-light: #f5f5f5;
+  --gray-medium: #e1e1e1;
+  --gray-dark: #34495e;
+  --text-color: #2c3e50;
+  --border-color: #ddd;
+  --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --transition: all 0.3s ease;
+}
+
+/* Reset and Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: var(--gray-light);
+  color: var(--text-color);
+  line-height: 1.6;
+  direction: rtl;
+  padding: 15px;
+}
+
+/* Container */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+}
+
+/* Typography */
+h1 {
+  color: var(--text-color);
+  text-align: center;
+  margin-bottom: 30px;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+h2 {
+  color: var(--text-color);
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+h3 {
+  color: var(--text-color);
+  margin-top: 25px;
+  margin-bottom: 15px;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* Tab Navigation */
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  border: 1px solid var(--border-color);
+  background-color: var(--gray-light);
+  border-radius: 5px 5px 0 0;
+  margin-bottom: 0;
+  gap: 5px;
+  padding: 5px;
+}
+
+.tab-button {
+  background-color: transparent;
+  border: none;
+  border-radius: 4px;
+  outline: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  transition: var(--transition);
+  font-size: 14px;
+  font-weight: 500;
+  flex: 1;
+  min-width: 150px;
+  white-space: nowrap;
+  color: var(--text-color);
+}
+
+.tab-button:hover {
+  background-color: #d3d3d3;
+  transform: translateY(-2px);
+}
+
+.tab-button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.tab-button.active {
+  background-color: var(--primary-color);
+  color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
+}
+
+/* Tab Content */
+.tab-content {
+  display: none;
+  padding: 25px;
+  border: 1px solid var(--border-color);
+  border-top: none;
+  border-radius: 0 0 5px 5px;
+  animation: fadeIn 0.3s ease-in;
+}
+
+.tab-content.active {
+  display: block;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Form Styles */
+.form-group {
+  margin-bottom: 20px;
+}
+
+label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 14px;
+}
+
+.optional-field {
+  color: #7f8c8d;
+  font-size: 0.85em;
+  margin-right: 5px;
+  font-weight: 400;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  font-size: 16px;
+  font-family: inherit;
+  transition: var(--transition);
+  direction: rtl;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+}
+
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* Button Styles */
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+button {
+  flex: 1;
+  min-width: 150px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: var(--transition);
+  font-family: inherit;
+}
+
+#calculate-btn {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+#calculate-btn:hover {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+#calculate-btn:focus {
+  outline: 2px solid var(--primary-dark);
+  outline-offset: 2px;
+}
+
+#reset-btn {
+  background-color: #95a5a6;
+  color: white;
+}
+
+#reset-btn:hover {
+  background-color: #7f8c8d;
+}
+
+#reset-btn:focus {
+  outline: 2px solid #7f8c8d;
+  outline-offset: 2px;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Results Section */
+.result {
+  margin-top: 30px;
+  padding: 25px;
+  background-color: #f1f9ff;
+  border-radius: 4px;
+  border-right: 4px solid var(--primary-color);
+  display: none;
+  animation: slideIn 0.4s ease-out;
+}
+
+.result.show {
+  display: block;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.result-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--gray-medium);
+  gap: 10px;
+}
+
+.result-row:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.result-label {
+  font-weight: 600;
+  color: var(--text-color);
+  flex: 1;
+}
+
+.result-value {
+  color: var(--primary-dark);
+  font-weight: 600;
+  text-align: left;
+  min-width: 120px;
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+  overflow-x: auto;
+}
+
+table, th, td {
+  border: 1px solid var(--border-color);
+}
+
+th, td {
+  padding: 12px;
+  text-align: right;
+}
+
+th {
+  background-color: var(--gray-light);
+  font-weight: 600;
+  color: var(--text-color);
+}
+
+tr:nth-child(even) {
+  background-color: rgba(245, 245, 245, 0.5);
+}
+
+tbody tr:hover {
+  background-color: rgba(52, 152, 219, 0.05);
+}
+
+/* Notes and Info */
+.note {
+  margin-top: 30px;
+  padding: 15px;
+  background-color: #fff3cd;
+  border-left: 4px solid #ffc107;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #856404;
+  line-height: 1.6;
+}
+
+.note strong {
+  display: block;
+  margin-bottom: 8px;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+/* Focus visible for keyboard navigation */
+:focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 15px;
+  }
+
+  h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tab-button {
+    min-width: unset;
+    width: 100%;
+    text-align: right;
+  }
+
+  .tab-content {
+    padding: 20px;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  button {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .result-row {
+    flex-direction: column;
+  }
+
+  .result-label {
+    margin-bottom: 5px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th, td {
+    padding: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  body {
+    padding: 10px;
+  }
+
+  .container {
+    padding: 12px;
+  }
+
+  h1 {
+    font-size: 20px;
+  }
+
+  input,
+  select {
+    padding: 10px;
+    font-size: 16px;
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  label {
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+
+  button {
+    padding: 10px 15px;
+    font-size: 14px;
+  }
+
+  .result {
+    padding: 15px;
+  }
+
+  .result-row {
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+  }
+}
+
+/* Print Styles */
+@media print {
+  body {
+    background: white;
+    padding: 0;
+  }
+
+  .container {
+    box-shadow: none;
+    padding: 0;
+  }
+
+  .button-group,
+  .tabs {
+    display: none;
+  }
+
+  .result {
+    border: 1px solid #ddd;
+  }
+}
